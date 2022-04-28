@@ -2,5 +2,4 @@
 <resources>
     <dimen name="default_padding">8dp</dimen>
     <dimen name="double_default_padding">16dp</dimen>
-    <dimen name="fragment_padding">24dp</dimen>
 </resources>

@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/fragment_padding"
+        android:padding="@dimen/double_default_padding"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
         <ImageView
@@ -24,8 +24,8 @@
             android:id="@+id/upcoming_elections_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_padding"
             android:text="@string/upcoming_elections_text"
+            android:layout_marginHorizontal="@dimen/default_padding"
             app:layout_constraintBottom_toTopOf="@+id/representatives_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -35,6 +35,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/representatives_text"
+            android:layout_marginHorizontal="@dimen/default_padding"
+            android:layout_marginVertical="@dimen/default_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
