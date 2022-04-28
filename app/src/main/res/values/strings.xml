@@ -4,4 +4,6 @@
     <string name="home_screen_logo_description">Image of ballot</string>
     <string name="upcoming_elections_text">Upcoming elections</string>
     <string name="representatives_text">Find my representatives</string>
+    <string name="upcoming_elections">Upcoming Elections</string>
+    <string name="saved_elections">Saved Elections</string>
 </resources>
