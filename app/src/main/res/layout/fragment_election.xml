@@ -17,7 +17,7 @@
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
         <TextView
-            android:id="@+id/upcomingElectionsTextView"
+            android:id="@+id/upcoming_elections_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/upcoming_elections"
@@ -26,42 +26,42 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/upcomingElectionsRecyclerView"
+            android:id="@+id/upcoming_elections_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/default_padding"
             android:layout_marginBottom="@dimen/double_default_padding"
-            app:layout_constraintBottom_toTopOf="@+id/savedElectionsTextView"
+            app:layout_constraintBottom_toTopOf="@+id/saved_elections_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/upcomingElectionsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/upcoming_elections_text_view"
             app:layout_constraintVertical_bias="0.0"
             tools:itemCount="16"
             tools:listitem="@layout/election_item_view" />
 
         <TextView
-            android:id="@+id/savedElectionsTextView"
+            android:id="@+id/saved_elections_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/saved_elections"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/electionsDividerGuideline" />
+            app:layout_constraintTop_toTopOf="@+id/elections_divider_guideline" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/savedElectionsRecyclerView"
+            android:id="@+id/saved_elections_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/default_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/savedElectionsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/saved_elections_text_view"
             tools:itemCount="16"
             tools:listitem="@layout/election_item_view"/>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/electionsDividerGuideline"
+            android:id="@+id/elections_divider_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
