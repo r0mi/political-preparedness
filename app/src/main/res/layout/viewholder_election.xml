@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO: Connect to Election model -->
     <data>
+        <variable
+            name="election"
+            type="com.example.android.politicalpreparedness.network.models.Election" />
 
     </data>
 
@@ -13,23 +15,23 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/electionNameTextView"
+            android:id="@+id/election_name_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@{election.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@sample/election_names" />
 
         <TextView
-            android:id="@+id/electionDayTextView"
+            android:id="@+id/election_day_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@{election.electionDay.toString()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/electionNameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/election_name_text_view"
             tools:text="@sample/election_dates" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
