@@ -12,4 +12,16 @@
     <string name="voting_locations">Voting Locations</string>
     <string name="ballot_information">Ballot Information</string>
     <string name="correspondence_address">Correspondence Address</string>
+    <string name="representative_search">Representative Search</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="find_my_representatives">Find My Representatives</string>
+    <string name="use_my_location">Use My Location</string>
+    <string name="my_representatives">My Representatives</string>
+    <string name="representative_photo">Representative photo</string>
+    <string name="twitter_icon">Twitter icon</string>
+    <string name="facebook_icon">Facebook icon</string>
+    <string name="www_icon">Globe icon</string>
 </resources>

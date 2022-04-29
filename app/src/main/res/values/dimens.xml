@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="half_padding">4dp</dimen>
     <dimen name="default_padding">8dp</dimen>
-    <dimen name="double_default_padding">16dp</dimen>
+    <dimen name="double_padding">16dp</dimen>
+    <dimen name="social_icon_size">32dp</dimen>
+    <dimen name="touch_target_size">48dp</dimen>
+    <dimen name="representative_photo_size">64dp</dimen>
+    <dimen name="zero_margin">0dp</dimen>
 </resources>
