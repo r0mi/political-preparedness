@@ -77,4 +77,8 @@ dependencies {
 
     // Location
     implementation "com.google.android.gms:play-services-location:$version_play_services_location"
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:$version_timer"
+
 }
