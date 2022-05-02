@@ -1,16 +1,75 @@
 package com.example.android.politicalpreparedness.election
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
+import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.SingleLiveEvent
+import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.source.ElectionsRepository
+import com.example.android.politicalpreparedness.network.models.Election
+import kotlinx.coroutines.launch
 
-//TODO: Construct ViewModel and provide election datasource
-class ElectionsViewModel: ViewModel() {
+class ElectionsViewModel(private val electionsRepository: ElectionsRepository) : ViewModel() {
 
-    //TODO: Create live data val for upcoming elections
+    val showErrorMessage: SingleLiveEvent<Pair<String?, Int?>> = SingleLiveEvent()
+    val navigateTo: SingleLiveEvent<NavDirections> = SingleLiveEvent()
+
+    private val _upcomingElections = MutableLiveData<List<Election>>()
+    val upcomingElection: LiveData<List<Election>?> = _upcomingElections
+
+    private val _upcomingElectionsLoading = MutableLiveData<Boolean>()
+    val upcomingElectionsLoading: LiveData<Boolean> = _upcomingElectionsLoading
 
     //TODO: Create live data val for saved elections
 
     //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
 
-    //TODO: Create functions to navigate to saved or upcoming election voter info
+    init {
+        refreshUpcomingElections()
+    }
 
+    private fun refreshUpcomingElections() {
+        viewModelScope.launch {
+            try {
+                _upcomingElectionsLoading.value = true
+                when (val result = electionsRepository.getElections()) {
+                    is Result.Success -> {
+                        val elections = result.data
+                        _upcomingElections.value = elections
+                        _upcomingElectionsLoading.value = false
+                    }
+                    is Result.Error -> {
+                        showErrorMessage.postValue(
+                            Pair(
+                                result.exception.localizedMessage,
+                                R.string.failed_to_load_upcoming_elections
+                            )
+                        )
+                        _upcomingElectionsLoading.value = false
+                    }
+                    is Result.Loading -> {
+                        _upcomingElectionsLoading.value = true
+                    }
+                }
+            } catch (e: Exception) {
+                _upcomingElectionsLoading.value = false
+                showErrorMessage.postValue(
+                    Pair(
+                        e.localizedMessage,
+                        R.string.failed_to_load_upcoming_elections
+                    )
+                )
+            }
+        }
+    }
+
+    fun electionClicked(election: Election) {
+        navigateTo.value = ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(
+            election.id,
+            election.division
+        )
+    }
 }

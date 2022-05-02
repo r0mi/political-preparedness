@@ -5,6 +5,7 @@
 
     <!-- TODO: Add node to connect Election ViewModel -->
     <data>
+
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.ElectionsViewModel" />
@@ -27,6 +28,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/upcoming_elections_recycler_view"
+            liveData="@{viewModel.upcomingElection}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/default_padding"
@@ -38,6 +40,19 @@
             app:layout_constraintVertical_bias="0.0"
             tools:itemCount="16"
             tools:listitem="@layout/viewholder_election" />
+
+        <ProgressBar
+            android:id="@+id/upcoming_elections_progressbar"
+            fadeVisible="@{viewModel.upcomingElectionsLoading.booleanValue()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/upcoming_elections_recycler_view"
+            app:layout_constraintEnd_toEndOf="@+id/upcoming_elections_recycler_view"
+            app:layout_constraintStart_toStartOf="@+id/upcoming_elections_recycler_view"
+            app:layout_constraintTop_toTopOf="@+id/upcoming_elections_recycler_view"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/saved_elections_text_view"
@@ -58,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/saved_elections_text_view"
             tools:itemCount="16"
-            tools:listitem="@layout/viewholder_election"/>
+            tools:listitem="@layout/viewholder_election" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/elections_divider_guideline"

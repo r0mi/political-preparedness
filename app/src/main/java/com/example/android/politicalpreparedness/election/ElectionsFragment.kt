@@ -6,27 +6,60 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.android.politicalpreparedness.MyApp
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.election.adapter.ElectionListener
+import com.google.android.material.snackbar.Snackbar
 
-class ElectionsFragment: Fragment() {
+class ElectionsFragment : Fragment() {
 
     private lateinit var binding: FragmentElectionBinding
-    //TODO: Declare ViewModel
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    private val viewModel by viewModels<ElectionsViewModel> {
+        ElectionsViewModelFactory(
+            (requireContext().applicationContext as MyApp).electionsRepository
+        )
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_election, container, false)
-        //TODO: Add ViewModel values and create ViewModel
-        //binding.viewModel = ElectionsViewModel()
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
+        viewModel.showErrorMessage.observe(viewLifecycleOwner) { (msg, resId) ->
+            if (resId != null && msg != null) {
+                Snackbar.make(this.requireView(), getString(resId, msg), Snackbar.LENGTH_LONG)
+                    .show()
+            } else if (resId != null) {
+                Snackbar.make(this.requireView(), resId, Snackbar.LENGTH_LONG).show()
+            } else if (msg != null) {
+                Snackbar.make(this.requireView(), msg, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.navigateTo.observe(viewLifecycleOwner) { navDirections ->
+            findNavController().navigate(navDirections)
+        }
         //TODO: Add binding values
 
         //TODO: Link elections to voter info
 
-        //TODO: Initiate recycler adapters
+        val electionsListener = ElectionListener {
+            viewModel.electionClicked(it)
+        }
+        binding.upcomingElectionsRecyclerView.setup(ElectionListAdapter(electionsListener))
+        binding.savedElectionsRecyclerView.setup(ElectionListAdapter(electionsListener))
 
         //TODO: Populate recycler adapters
 
@@ -34,5 +67,11 @@ class ElectionsFragment: Fragment() {
     }
 
     //TODO: Refresh adapters when fragment loads
+}
 
+private fun RecyclerView.setup(electionListAdapter: ElectionListAdapter) {
+    this.apply {
+        layoutManager = LinearLayoutManager(this.context)
+        this.adapter = electionListAdapter
+    }
 }
