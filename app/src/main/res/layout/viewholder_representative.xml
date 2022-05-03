@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_padding">
+        android:paddingVertical="@dimen/default_padding">
 
         <ImageView
             android:id="@+id/representative_photo"
@@ -29,6 +29,7 @@
 
         <TextView
             android:id="@+id/representative_title_text_view"
+            style="@style/RepresentativeTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_padding"
@@ -40,6 +41,7 @@
 
         <TextView
             android:id="@+id/representative_name_text_view"
+            style="@style/RepresentativeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/half_padding"

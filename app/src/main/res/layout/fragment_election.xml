@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.ElectionsViewModel" />
@@ -12,13 +13,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/default_padding"
+        android:paddingHorizontal="@dimen/default_padding"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
         <TextView
             android:id="@+id/upcoming_elections_text_view"
+            style="@style/ElectionsSectionHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/default_padding"
             android:text="@string/upcoming_elections"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +32,7 @@
             liveData="@{viewModel.upcomingElection}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/default_padding"
-            android:layout_marginBottom="@dimen/double_padding"
+            android:paddingBottom="@dimen/default_padding"
             app:layout_constraintBottom_toTopOf="@+id/saved_elections_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +56,7 @@
 
         <TextView
             android:id="@+id/saved_elections_text_view"
+            style="@style/ElectionsSectionHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/saved_elections"
@@ -66,7 +69,6 @@
             liveData="@{viewModel.savedElections}"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/default_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -25,6 +25,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/election_name"
+            style="@style/VoterInfoToolbarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/default_padding"
@@ -33,7 +34,6 @@
             app:title="@{viewModel.election.name}"
             tools:title="@sample/election_names" />
 
-        <!-- TODO: Add visual styling -->
         <TextView
             android:id="@+id/election_date"
             android:layout_width="match_parent"
@@ -43,16 +43,15 @@
             app:layout_constraintTop_toBottomOf="@id/election_name"
             tools:text="@sample/election_dates" />
 
-        <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/state_header"
+            style="@style/VoterInfoSectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/election_information"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/election_date" />
 
-        <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/state_locations"
             goneUnless="@{viewModel.votingLocationFinderUrl != null}"
@@ -60,10 +59,10 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.votingLocationClicked()}"
             android:text="@string/voting_locations"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_header" />
 
-        <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/state_ballot"
             goneUnless="@{viewModel.ballotInfoUrl != null}"
@@ -71,6 +70,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.ballotInfoClicked()}"
             android:text="@string/ballot_information"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="@id/election_date"
             app:layout_constraintTop_toBottomOf="@id/state_locations" />
 
@@ -82,9 +82,9 @@
             app:constraint_referenced_ids="state_correspondence_header,address"
             tools:visibility="visible" />
 
-        <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/state_correspondence_header"
+            style="@style/VoterInfoSectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/correspondence_address"

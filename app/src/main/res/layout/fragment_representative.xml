@@ -14,22 +14,22 @@
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="@dimen/default_padding"
-        android:paddingEnd="@dimen/default_padding"
+        android:paddingHorizontal="@dimen/default_padding"
         app:layoutDescription="@xml/fragment_representative_scene">
 
-        <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/search_title"
+            style="@style/ElectionsSectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/representative_search"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/address_line_1"
+            style="@style/TextInputStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -41,9 +41,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_title" />
 
-        <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/address_line_2"
+            style="@style/TextInputStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -55,9 +55,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
-        <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/city"
+            style="@style/TextInputStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -69,7 +69,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
-        <!-- TODO: Add visual styling and content -->
         <Spinner
             android:id="@+id/state"
             stateValue="@={viewModel.state}"
@@ -84,9 +83,9 @@
             app:layout_constraintStart_toEndOf="@id/city"
             app:layout_constraintTop_toTopOf="@id/city" />
 
-        <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/zip"
+            style="@style/TextInputStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -99,7 +98,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/city" />
 
-        <!-- TODO: Add visual styling and label -->
         <Button
             android:id="@+id/button_search"
             android:layout_width="match_parent"
@@ -108,7 +106,6 @@
             android:text="@string/find_my_representatives"
             app:layout_constraintTop_toBottomOf="@id/zip" />
 
-        <!-- TODO: Add visual styling and content -->
         <Button
             android:id="@+id/button_location"
             android:layout_width="match_parent"
@@ -117,9 +114,9 @@
             android:text="@string/use_my_location"
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
-        <!-- TODO: Add visual styling and content -->
         <TextView
             android:id="@+id/representative_title"
+            style="@style/RepresentativesSectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_representatives"
