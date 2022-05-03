@@ -7,4 +7,6 @@
     <dimen name="touch_target_size">48dp</dimen>
     <dimen name="representative_photo_size">64dp</dimen>
     <dimen name="zero_margin">0dp</dimen>
+    <dimen name="facebook_icon_margin">40dp</dimen>
+    <dimen name="www_icon_margin">80dp</dimen>
 </resources>

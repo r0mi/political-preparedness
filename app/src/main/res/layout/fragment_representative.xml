@@ -3,16 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Add data binding node -->
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
     </data>
 
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/default_padding"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
         app:layoutDescription="@xml/fragment_representative_scene">
 
         <!-- TODO: Add visual styling and content -->
@@ -24,7 +27,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/address_line_1"
@@ -34,11 +36,11 @@
             android:hint="@string/address_line_1"
             android:inputType="textPostalAddress"
             android:minHeight="@dimen/touch_target_size"
+            android:text="@={viewModel.addressLine1}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_title" />
 
-        <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/address_line_2"
@@ -48,11 +50,11 @@
             android:hint="@string/address_line_2"
             android:inputType="textPostalAddress"
             android:minHeight="@dimen/touch_target_size"
+            android:text="@={viewModel.addressLine2}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
-        <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/city"
@@ -62,14 +64,15 @@
             android:hint="@string/city"
             android:inputType="textPostalAddress"
             android:minHeight="@dimen/touch_target_size"
+            android:text="@={viewModel.city}"
             app:layout_constraintEnd_toStartOf="@id/state"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
-        <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
         <Spinner
             android:id="@+id/state"
+            stateValue="@={viewModel.state}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:autofillHints=""
@@ -81,7 +84,6 @@
             app:layout_constraintStart_toEndOf="@id/city"
             app:layout_constraintTop_toTopOf="@id/city" />
 
-        <!-- TODO: Add data binding value -->
         <!-- TODO: Add visual styling and content -->
         <EditText
             android:id="@+id/zip"
@@ -92,6 +94,7 @@
             android:inputType="number"
             android:maxLength="5"
             android:minHeight="@dimen/touch_target_size"
+            android:text="@={viewModel.zip}"
             app:layout_constraintEnd_toEndOf="@id/city"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/city" />
@@ -101,6 +104,7 @@
             android:id="@+id/button_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.findRepresentativesClicked()}"
             android:text="@string/find_my_representatives"
             app:layout_constraintTop_toBottomOf="@id/zip" />
 
@@ -109,6 +113,7 @@
             android:id="@+id/button_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.getLocation()}"
             android:text="@string/use_my_location"
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
@@ -123,8 +128,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/representatives_recycler_view"
+            liveData="@{viewModel.representatives}"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -134,16 +141,18 @@
             tools:itemCount="16"
             tools:listitem="@layout/viewholder_representative" />
 
-        <!-- TODO: Add visual styling and content -->
-        <TextView
-            android:id="@+id/list_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:textAlignment="center"
+        <ProgressBar
+            android:id="@+id/representatives_progressbar"
+            fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/representative_title" />
+            app:layout_constraintBottom_toBottomOf="@+id/representatives_recycler_view"
+            app:layout_constraintEnd_toEndOf="@+id/representatives_recycler_view"
+            app:layout_constraintStart_toStartOf="@+id/representatives_recycler_view"
+            app:layout_constraintTop_toTopOf="@+id/representatives_recycler_view"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

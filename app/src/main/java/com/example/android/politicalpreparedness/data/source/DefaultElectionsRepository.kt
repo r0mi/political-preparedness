@@ -5,6 +5,7 @@ import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.source.local.ElectionsLocalDataSource
 import com.example.android.politicalpreparedness.data.source.remote.RemoteDataSource
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.RepresentativeResponse
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,11 @@ class DefaultElectionsRepository(
     override suspend fun getVoterInfo(address: String, electionId: Int): Result<VoterInfoResponse> =
         withContext(ioDispatcher) {
             return@withContext remoteDataSource.getVoterInfo(address, electionId)
+        }
+
+    override suspend fun getRepresentatives(address: String): Result<RepresentativeResponse> =
+        withContext(ioDispatcher) {
+            return@withContext remoteDataSource.getRepresentatives(address)
         }
 
     override fun observeFollowedElections(): LiveData<List<Election>> {

@@ -13,7 +13,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.result.IntentSenderRequest
@@ -21,48 +23,57 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.BuildConfig
+import com.example.android.politicalpreparedness.MyApp
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
+import com.example.android.politicalpreparedness.ifNotNull
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.snackbar.Snackbar
-import com.example.android.politicalpreparedness.ifNotNull
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.LocationSettingsRequest
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentRepresentativeBinding
 
-    //TODO: Declare ViewModel
+    private val viewModel by viewModels<RepresentativeViewModel> {
+        RepresentativeViewModelFactory(
+            (requireContext().applicationContext as MyApp).electionsRepository
+        )
+    }
 
     private val startIntentSenderForResult =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
             checkDeviceLocationSettingsAndRequestLocation(false)
         }
 
-    private val locationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        val locationPermissionGranted = permissions.entries.any { it.value == true }
-        when {
-            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                Timber.d("Precise location access granted")
+    private val locationPermissionRequest =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val locationPermissionGranted = permissions.entries.any { it.value == true }
+            when {
+                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                    Timber.d("Precise location access granted")
+                }
+                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                    Timber.d("Only approximate location access granted")
+                }
+                else -> {
+                    Timber.e("No location access granted")
+                }
             }
-            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                Timber.d("Only approximate location access granted")
-            } else -> {
-                Timber.e("No location access granted")
+            if (locationPermissionGranted) {
+                checkDeviceLocationSettingsAndRequestLocation()
+            } else {
+                showPermissionDeniedRationale()
             }
         }
-        if (locationPermissionGranted) {
-            checkDeviceLocationSettingsAndRequestLocation()
-        } else {
-            showPermissionDeniedRationale()
-        }
-    }
 
     private fun showPermissionDeniedRationale() {
         showSnackbar(
@@ -83,23 +94,38 @@ class DetailFragment : Fragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        //TODO: Establish bindings
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentRepresentativeBinding.inflate(inflater)
+        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        //TODO: Define and assign Representative adapter
-
-        //TODO: Populate Representative adapter
-
-        //TODO: Establish button listeners for field and location search
-        binding.buttonLocation.setOnClickListener {
+        viewModel.requestLocation.observe(viewLifecycleOwner) {
             if (checkLocationPermissions()) {
                 checkDeviceLocationSettingsAndRequestLocation()
             }
         }
+
+        viewModel.showErrorMessage.observe(viewLifecycleOwner) { (msg, resId) ->
+            if (resId != null && msg != null) {
+                Snackbar.make(this.requireView(), getString(resId, msg), Snackbar.LENGTH_LONG)
+                    .show()
+            } else if (resId != null) {
+                Snackbar.make(this.requireView(), resId, Snackbar.LENGTH_LONG).show()
+            } else if (msg != null) {
+                Snackbar.make(this.requireView(), msg, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.findRepresentatives.observe(viewLifecycleOwner) {
+            hideKeyboard()
+        }
+
+        binding.representativesRecyclerView.adapter = RepresentativeListAdapter()
+
         return binding.root
     }
 
@@ -129,7 +155,11 @@ class DetailFragment : Fragment() {
                     Timber.d("Error getting location settings resolution: ${sendEx.message}")
                 }
             } else {
-                showSnackbar(R.string.location_service_rationale, Snackbar.LENGTH_INDEFINITE, R.string.enable) {
+                showSnackbar(
+                    R.string.location_service_rationale,
+                    Snackbar.LENGTH_INDEFINITE,
+                    R.string.enable
+                ) {
                     checkDeviceLocationSettingsAndRequestLocation()
                 }
             }
@@ -144,32 +174,44 @@ class DetailFragment : Fragment() {
         return if (isPermissionGranted()) {
             true
         } else {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) || shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) || shouldShowRequestPermissionRationale(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
                 Timber.w("Show permission rationale, as it was previously denied")
                 showPermissionDeniedRationale()
             } else {
-                locationPermissionRequest.launch(arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION))
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
             }
             false
         }
     }
 
-    private fun isPermissionGranted() : Boolean {
-        val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    private fun isPermissionGranted(): Boolean {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
         return permissions.map { permission ->
-            ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
         }.any { it }
     }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         val priority = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                LocationRequest.QUALITY_HIGH_ACCURACY
-            } else {
-                com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-            }
+            LocationRequest.QUALITY_HIGH_ACCURACY
+        } else {
+            com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
         if (isPermissionGranted()) {
             fusedLocationProviderClient.getCurrentLocation(
                 priority,
@@ -178,7 +220,7 @@ class DetailFragment : Fragment() {
                 it?.let {
                     val address = geoCodeLocation(it)
                     Timber.d("location is $it, address $address")
-                    //TODO: Use the address
+                    viewModel.setAddress(address)
                 } ?: showSnackbar(R.string.location_failed)
             }.addOnFailureListener {
                 showSnackbar(R.string.location_failed)
@@ -192,10 +234,16 @@ class DetailFragment : Fragment() {
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
-                }
-                .first()
+            .map { address ->
+                Address(
+                    address.thoroughfare,
+                    address.subThoroughfare,
+                    address.locality,
+                    address.adminArea,
+                    address.postalCode
+                )
+            }
+            .first()
     }
 
     private fun hideKeyboard() {

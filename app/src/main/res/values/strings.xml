@@ -31,5 +31,10 @@
     <string name="enable">Enable</string>
     <string name="failed_to_load_upcoming_elections">Failed to load upcoming elections: %1$s</string>
     <string name="failed_to_load_voter_info">Failed to load voter info: %1$s</string>
+    <string name="failed_to_load_representatives">Failed to load representatives: %1$s</string>
     <string name="connection_error_image">Connection error image</string>
+    <string name="error_address_line1">Please fill in first address line</string>
+    <string name="error_city">Please enter a city</string>
+    <string name="error_state">Please select a state</string>
+    <string name="error_zip">Please enter a zip code</string>
 </resources>

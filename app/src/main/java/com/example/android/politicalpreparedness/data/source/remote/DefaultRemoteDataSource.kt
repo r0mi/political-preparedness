@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.data.source.remote
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.network.CivicsApiService
 import com.example.android.politicalpreparedness.network.models.Election
+import com.example.android.politicalpreparedness.network.models.RepresentativeResponse
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,15 @@ class DefaultRemoteDataSource(
         withContext(ioDispatcher) {
             return@withContext try {
                 Result.Success(apiService.getVoterInfo(address, electionId))
+            } catch (e: Exception) {
+                Result.Error(e)
+            }
+        }
+
+    override suspend fun getRepresentatives(address: String): Result<RepresentativeResponse> =
+        withContext(ioDispatcher) {
+            return@withContext try {
+                Result.Success(apiService.getRepresentatives(address))
             } catch (e: Exception) {
                 Result.Error(e)
             }
