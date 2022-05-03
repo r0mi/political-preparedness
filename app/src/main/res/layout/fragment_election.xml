@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Add node to connect Election ViewModel -->
     <data>
-
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.ElectionsViewModel" />
@@ -65,6 +63,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/saved_elections_recycler_view"
+            liveData="@{viewModel.savedElections}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/default_padding"

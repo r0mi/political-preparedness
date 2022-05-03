@@ -23,23 +23,21 @@ class ElectionsViewModel(private val electionsRepository: ElectionsRepository) :
     private val _upcomingElectionsLoading = MutableLiveData<Boolean>()
     val upcomingElectionsLoading: LiveData<Boolean> = _upcomingElectionsLoading
 
-    //TODO: Create live data val for saved elections
-
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
+    val savedElections: LiveData<List<Election>> = electionsRepository.observeFollowedElections()
 
     init {
         refreshUpcomingElections()
     }
 
     private fun refreshUpcomingElections() {
+        _upcomingElectionsLoading.value = true
         viewModelScope.launch {
             try {
-                _upcomingElectionsLoading.value = true
                 when (val result = electionsRepository.getElections()) {
                     is Result.Success -> {
                         val elections = result.data
                         _upcomingElections.value = elections
-                        _upcomingElectionsLoading.value = false
+                        _upcomingElectionsLoading.postValue(false)
                     }
                     is Result.Error -> {
                         showErrorMessage.postValue(
@@ -48,14 +46,14 @@ class ElectionsViewModel(private val electionsRepository: ElectionsRepository) :
                                 R.string.failed_to_load_upcoming_elections
                             )
                         )
-                        _upcomingElectionsLoading.value = false
+                        _upcomingElectionsLoading.postValue(false)
                     }
                     is Result.Loading -> {
-                        _upcomingElectionsLoading.value = true
+                        _upcomingElectionsLoading.postValue(true)
                     }
                 }
             } catch (e: Exception) {
-                _upcomingElectionsLoading.value = false
+                _upcomingElectionsLoading.postValue(false)
                 showErrorMessage.postValue(
                     Pair(
                         e.localizedMessage,

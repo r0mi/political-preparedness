@@ -51,9 +51,6 @@ class ElectionsFragment : Fragment() {
         viewModel.navigateTo.observe(viewLifecycleOwner) { navDirections ->
             findNavController().navigate(navDirections)
         }
-        //TODO: Add binding values
-
-        //TODO: Link elections to voter info
 
         val electionsListener = ElectionListener {
             viewModel.electionClicked(it)
@@ -61,12 +58,8 @@ class ElectionsFragment : Fragment() {
         binding.upcomingElectionsRecyclerView.setup(ElectionListAdapter(electionsListener))
         binding.savedElectionsRecyclerView.setup(ElectionListAdapter(electionsListener))
 
-        //TODO: Populate recycler adapters
-
         return binding.root
     }
-
-    //TODO: Refresh adapters when fragment loads
 }
 
 private fun RecyclerView.setup(electionListAdapter: ElectionListAdapter) {
