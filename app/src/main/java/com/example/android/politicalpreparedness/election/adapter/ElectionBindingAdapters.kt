@@ -31,3 +31,8 @@ fun setFadeVisible(view: View, visible: Boolean? = true) {
         }
     }
 }
+
+@BindingAdapter("goneUnless")
+fun setVisibility(view: View, visible: Boolean? = false) {
+    view.visibility = if (visible == true) View.VISIBLE else View.GONE
+}

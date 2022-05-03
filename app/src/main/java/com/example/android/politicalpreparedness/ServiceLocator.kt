@@ -3,9 +3,11 @@ package com.example.android.politicalpreparedness
 import android.content.Context
 import com.example.android.politicalpreparedness.data.source.DefaultElectionsRepository
 import com.example.android.politicalpreparedness.data.source.ElectionsRepository
+import com.example.android.politicalpreparedness.data.source.local.DefaultElectionsLocalDataSource
 import com.example.android.politicalpreparedness.data.source.local.ElectionsLocalDataSource
 import com.example.android.politicalpreparedness.data.source.remote.DefaultRemoteDataSource
 import com.example.android.politicalpreparedness.data.source.remote.RemoteDataSource
+import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.CivicsApi
 
 object ServiceLocator {
@@ -28,9 +30,9 @@ object ServiceLocator {
     }
 
     private fun createElectionsLocalDataSource(context: Context): ElectionsLocalDataSource {
-        return object : ElectionsLocalDataSource {
-
-        }
+        return DefaultElectionsLocalDataSource(
+            ElectionDatabase.getInstance(context).electionDao
+        )
     }
 
     private fun createRemoteDataSource(): RemoteDataSource {

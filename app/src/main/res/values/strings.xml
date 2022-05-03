@@ -30,4 +30,6 @@
     <string name="settings">Settings</string>
     <string name="enable">Enable</string>
     <string name="failed_to_load_upcoming_elections">Failed to load upcoming elections: %1$s</string>
+    <string name="failed_to_load_voter_info">Failed to load voter info: %1$s</string>
+    <string name="connection_error_image">Connection error image</string>
 </resources>
