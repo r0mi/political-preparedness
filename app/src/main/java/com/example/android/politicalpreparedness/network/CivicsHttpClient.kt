@@ -2,28 +2,28 @@ package com.example.android.politicalpreparedness.network
 
 import okhttp3.OkHttpClient
 
-class CivicsHttpClient: OkHttpClient() {
+class CivicsHttpClient : OkHttpClient() {
 
     companion object {
 
-        const val API_KEY = "AIzaSyDBMFLCZlOTXNY2vlfnobBpF4fV2y-hHvc"
+        const val API_KEY = "PLACE YOUR API KEY HERE"
 
         fun getClient(): OkHttpClient {
             return Builder()
-                    .addInterceptor { chain ->
-                        val original = chain.request()
-                        val url = original
-                                .url
-                                .newBuilder()
-                                .addQueryParameter("key", API_KEY)
-                                .build()
-                        val request = original
-                                .newBuilder()
-                                .url(url)
-                                .build()
-                        chain.proceed(request)
-                    }
-                    .build()
+                .addInterceptor { chain ->
+                    val original = chain.request()
+                    val url = original
+                        .url()
+                        .newBuilder()
+                        .addQueryParameter("key", API_KEY)
+                        .build()
+                    val request = original
+                        .newBuilder()
+                        .url(url)
+                        .build()
+                    chain.proceed(request)
+                }
+                .build()
         }
 
     }
